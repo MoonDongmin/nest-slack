@@ -1,10 +1,24 @@
-import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import {Module}        from "@nestjs/common";
+import {
+    ConfigModule,
+    ConfigService,
+}                      from "@nestjs/config";
+import {AppController} from "./app.controller";
+import {AppService}    from "./app.service";
+
+// const getEnv = async () => {
+//     const response = await axios.get("/비밀키요청");
+//     return response.data;
+// };
 
 @Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
+    imports: [
+        ConfigModule.forRoot({
+            isGlobal: true,
+            // load: [getEnv],
+        })],
+    controllers: [AppController],
+    providers: [AppService, ConfigService],
 })
-export class AppModule {}
+export class AppModule {
+}
