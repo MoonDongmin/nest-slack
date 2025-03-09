@@ -1,10 +1,15 @@
-import {Module}        from "@nestjs/common";
+import {
+    MiddlewareConsumer,
+    Module,
+    NestModule,
+}                         from "@nestjs/common";
 import {
     ConfigModule,
     ConfigService,
-}                      from "@nestjs/config";
-import {AppController} from "./app.controller";
-import {AppService}    from "./app.service";
+}                         from "@nestjs/config";
+import {AppController}    from "./app.controller";
+import {AppService}       from "./app.service";
+import {LoggerMiddleware} from "./middlewares/logger.middleware";
 
 // const getEnv = async () => {
 //     const response = await axios.get("/비밀키요청");
@@ -20,5 +25,8 @@ import {AppService}    from "./app.service";
     controllers: [AppController],
     providers: [AppService, ConfigService],
 })
-export class AppModule {
+export class AppModule implements NestModule {
+    configure(consumer: MiddlewareConsumer): any {
+        consumer.apply(LoggerMiddleware).forRoutes("*");
+    }
 }
