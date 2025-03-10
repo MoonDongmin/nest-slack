@@ -23,7 +23,19 @@ import {LoggerMiddleware} from "./middlewares/logger.middleware";
             // load: [getEnv],
         })],
     controllers: [AppController],
-    providers: [AppService, ConfigService],
+    // Nest는 여기 provider에 있는 것을 보고 의존성주입을 해줌
+    providers: [
+        // 이게 원형임
+        // {
+        //     provide: AppService,
+        //     useClass: AppService,
+        // },
+        {
+            provide: "CUSTOM_KEY",
+            useValue: "CUSTOM",
+        },
+        AppService,
+        ConfigService],
 })
 export class AppModule implements NestModule {
     configure(consumer: MiddlewareConsumer): any {

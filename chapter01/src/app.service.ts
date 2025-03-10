@@ -1,11 +1,17 @@
-import {Injectable}    from "@nestjs/common";
+import {
+    Inject,
+    Injectable,
+}                      from "@nestjs/common";
 import {ConfigService} from "@nestjs/config";
 
 // 비즈니스 로직 구현
 // 요청, 응답에 대해서는 모름
 @Injectable()
 export class AppService {
-    constructor(private readonly configService: ConfigService) {
+    constructor(
+        private readonly configService: ConfigService,
+        @Inject("CUSTOM_KEY") private readonly customeValue,
+    ) {
     }
 
     async getHello() {
