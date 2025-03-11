@@ -23,7 +23,6 @@ import {LoggerMiddleware} from "./middlewares/logger.middleware";
             // load: [getEnv],
         })],
     controllers: [AppController],
-    // Nest는 여기 provider에 있는 것을 보고 의존성주입을 해줌
     providers: [
         // 이게 원형임
         // {
