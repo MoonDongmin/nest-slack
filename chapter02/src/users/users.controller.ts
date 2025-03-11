@@ -5,17 +5,20 @@ import {
     Post,
     Req,
     Res,
-}                       from "@nestjs/common";
-import {JoinRequestDto} from "@/users/dto/join.request.dto";
-import {UsersService}   from "@/users/users.service";
+    UseInterceptors,
+}                                   from "@nestjs/common";
+import {JoinRequestDto}             from "@/users/dto/join.request.dto";
+import {UsersService}               from "@/users/users.service";
 import {
     ApiOperation,
     ApiResponse,
     ApiTags,
-}                       from "@nestjs/swagger";
-import {UserDto}        from "@/common/dto/user.dto";
-import {User}           from "@/common/decorators/user.decorator";
+}                                   from "@nestjs/swagger";
+import {UserDto}                    from "@/common/dto/user.dto";
+import {User}                       from "@/common/decorators/user.decorator";
+import {UndefinedToNullInterceptor} from "@/common/interceptors/undefinedToNull.interceptor";
 
+@UseInterceptors(UndefinedToNullInterceptor)
 @ApiTags("USER")
 @Controller("api/users")
 export class UsersController {
