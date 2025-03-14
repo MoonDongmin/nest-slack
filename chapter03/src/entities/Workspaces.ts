@@ -46,6 +46,9 @@ export class Workspaces {
   @Column('int', { name: 'OwnerId', nullable: true })
   OwnerId: number | null;
 
+  // ()안에 든 속성
+  // 첫 번째 파라미터: 현재 쪽 불리는 이름
+  // 두 번째 파라미터: Workspace에서 부리는 이름
   @OneToMany(() => Channels, (channels) => channels.Workspace)
   Channels: Channels[];
 

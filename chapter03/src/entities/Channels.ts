@@ -56,6 +56,8 @@ export class Channels {
     onDelete: 'SET NULL',
     onUpdate: 'CASCADE',
   })
+
+  // JoinColumn은 외래키가 있는 쪽에다가 붙임
   @JoinColumn([{ name: 'WorkspaceId', referencedColumnName: 'id' }])
   Workspace: Workspaces;
 }
