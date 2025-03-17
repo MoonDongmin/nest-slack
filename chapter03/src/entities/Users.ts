@@ -1,99 +1,130 @@
-import  {
-  Column,
-  CreateDateColumn,
-  DeleteDateColumn,
-  Entity,
-  Index,
-  JoinTable,
-  ManyToMany,
-  OneToMany,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from 'typeorm';
-import { ChannelChats } from './ChannelChats';
-import { ChannelMembers } from './ChannelMembers';
-import { Channels } from './Channels';
-import { DMs } from './DMs';
-import { Mentions } from './Mentions';
-import { WorkspaceMembers } from './WorkspaceMembers';
-import { Workspaces } from './Workspaces';
+import {
+    Column,
+    CreateDateColumn,
+    DeleteDateColumn,
+    Entity,
+    Index,
+    JoinTable,
+    ManyToMany,
+    OneToMany,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+}                         from "typeorm";
+import {ChannelChats}     from "./ChannelChats";
+import {ChannelMembers}   from "./ChannelMembers";
+import {Channels}         from "./Channels";
+import {DMs}              from "./DMs";
+import {Mentions}         from "./Mentions";
+import {WorkspaceMembers} from "./WorkspaceMembers";
+import {Workspaces}       from "./Workspaces";
+import {ApiProperty}      from "@nestjs/swagger";
 
-@Index('email', ['email'], { unique: true })
-@Entity({ schema: 'sleact', name: 'users' })
+@Index("email", ["email"], {unique: true})
+@Entity({
+    schema: "sleact",
+    name: "users",
+})
 export class Users {
-  @PrimaryGeneratedColumn({ type: 'int', name: 'id' })
-  id: number;
+    @ApiProperty({
+        example: 1,
+        description: "사용자 아이디",
+    })
+    @PrimaryGeneratedColumn({
+        type: "int",
+        name: "id",
+    })
+    id: number;
 
-  @Column('varchar', { name: 'email', unique: true, length: 30 })
-  email: string;
+    @ApiProperty({
+        example: "water_876@naver.com",
+        description: "사용자 이메일",
+    })
+    @Column("varchar", {
+        name: "email",
+        unique: true,
+        length: 30,
+    })
+    email: string;
 
-  @Column('varchar', { name: 'nickname', length: 30 })
-  nickname: string;
 
-  @Column('varchar', { name: 'password', length: 100, select: false })
-  password: string;
+    @ApiProperty({
+        example: '김천',
+        description: "사용자 닉네임",
+    })
+    @Column("varchar", {
+        name: "nickname",
+        length: 30,
+    })
+    nickname: string;
 
-  @CreateDateColumn()
-  createdAt: Date;
+    @Column("varchar", {
+        name: "password",
+        length: 100,
+        select: false,
+    })
+    password: string;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
+    @CreateDateColumn()
+    createdAt: Date;
 
-  @DeleteDateColumn()
-  deletedAt: Date | null;
+    @UpdateDateColumn()
+    updatedAt: Date;
 
-  @OneToMany(() => ChannelChats, (channelchats) => channelchats.User)
-  ChannelChats: ChannelChats[];
+    @DeleteDateColumn()
+    deletedAt: Date | null;
 
-  @OneToMany(() => ChannelMembers, (channelmembers) => channelmembers.User)
-  ChannelMembers: ChannelMembers[];
+    @OneToMany(() => ChannelChats, (channelchats) => channelchats.User)
+    ChannelChats: ChannelChats[];
 
-  @OneToMany(() => DMs, (dms) => dms.Sender)
-  DMs: DMs[];
+    @OneToMany(() => ChannelMembers, (channelmembers) => channelmembers.User)
+    ChannelMembers: ChannelMembers[];
 
-  @OneToMany(() => DMs, (dms) => dms.Receiver)
-  DMs2: DMs[];
+    @OneToMany(() => DMs, (dms) => dms.Sender)
+    DMs: DMs[];
 
-  @OneToMany(() => Mentions, (mentions) => mentions.Sender)
-  Mentions: Mentions[];
+    @OneToMany(() => DMs, (dms) => dms.Receiver)
+    DMs2: DMs[];
 
-  @OneToMany(() => Mentions, (mentions) => mentions.Receiver)
-  Mentions2: Mentions[];
+    @OneToMany(() => Mentions, (mentions) => mentions.Sender)
+    Mentions: Mentions[];
 
-  @OneToMany(
-    () => WorkspaceMembers,
-    (workspacemembers) => workspacemembers.User,
-  )
-  WorkspaceMembers: WorkspaceMembers[];
+    @OneToMany(() => Mentions, (mentions) => mentions.Receiver)
+    Mentions2: Mentions[];
 
-  @OneToMany(() => Workspaces, (workspaces) => workspaces.Owner)
-  OwnedWorkspaces: Workspaces[];
+    @OneToMany(
+        () => WorkspaceMembers,
+        (workspacemembers) => workspacemembers.User,
+    )
+    WorkspaceMembers: WorkspaceMembers[];
 
-  @ManyToMany(() => Workspaces, (workspaces) => workspaces.Members)
-  @JoinTable({
-    name: 'workspacemembers',
-    joinColumn: {
-      name: 'UserId',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'WorkspaceId',
-      referencedColumnName: 'id',
-    },
-  })
-  Workspaces: Workspaces[];
+    @OneToMany(() => Workspaces, (workspaces) => workspaces.Owner)
+    OwnedWorkspaces: Workspaces[];
 
-  @ManyToMany(() => Channels, (channels) => channels.Members)
-  @JoinTable({
-    name: 'channelmembers',
-    joinColumn: {
-      name: 'UserId',
-      referencedColumnName: 'id',
-    },
-    inverseJoinColumn: {
-      name: 'ChannelId',
-      referencedColumnName: 'id',
-    },
-  })
-  Channels: Channels[];
+    @ManyToMany(() => Workspaces, (workspaces) => workspaces.Members)
+    @JoinTable({
+        name: "workspacemembers",
+        joinColumn: {
+            name: "UserId",
+            referencedColumnName: "id",
+        },
+        inverseJoinColumn: {
+            name: "WorkspaceId",
+            referencedColumnName: "id",
+        },
+    })
+    Workspaces: Workspaces[];
+
+    @ManyToMany(() => Channels, (channels) => channels.Members)
+    @JoinTable({
+        name: "channelmembers",
+        joinColumn: {
+            name: "UserId",
+            referencedColumnName: "id",
+        },
+        inverseJoinColumn: {
+            name: "ChannelId",
+            referencedColumnName: "id",
+        },
+    })
+    Channels: Channels[];
 }
