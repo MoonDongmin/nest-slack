@@ -36,9 +36,10 @@ async function bootstrap() {
         }),
     );
 
+
     await app.listen(port);
     console.log(`listening on port ${port}`);
-
+    console.log(__dirname);
 
     if (module.hot) {
         module.hot.accept();

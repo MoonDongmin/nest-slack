@@ -17,6 +17,13 @@ import {WorkspacesModule} from "@/workspaces/workspaces.module";
 import {TypeOrmModule}    from "@nestjs/typeorm";
 import * as process       from "node:process";
 import {Users}            from "@/entities/Users";
+import {ChannelChats}     from "@/entities/ChannelChats";
+import {ChannelMembers}   from "@/entities/ChannelMembers";
+import {Channels}         from "@/entities/Channels";
+import {DMs}              from "@/entities/DMs";
+import {Mentions}         from "@/entities/Mentions";
+import {WorkspaceMembers} from "@/entities/WorkspaceMembers";
+import {Workspaces}       from "@/entities/Workspaces";
 
 @Module({
     imports: [
@@ -34,11 +41,19 @@ import {Users}            from "@/entities/Users";
             username: process.env.DB_USERNAME,
             password: process.env.DB_PASSWORD,
             database: process.env.DB_DATABASE,
-            // entities: ["entities/*"],
-            autoLoadEntities: true,
+            entities: [
+                ChannelChats,
+                ChannelMembers,
+                Channels,
+                DMs,
+                Mentions,
+                Users,
+                WorkspaceMembers,
+                Workspaces,
+            ],
             // 우리 DB에서 이걸 entities를 가져올 때 이 속성을 추가
             // DB에 entities를 넣고 나면 다시 false로 바꿈
-            synchronize: true,
+            synchronize: false,
             logging: true,
             charset: "utf8mb4",
         }),
