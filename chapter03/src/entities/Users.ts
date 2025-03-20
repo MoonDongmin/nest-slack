@@ -17,7 +17,12 @@ import {DMs}              from "./DMs";
 import {Mentions}         from "./Mentions";
 import {WorkspaceMembers} from "./WorkspaceMembers";
 import {Workspaces}       from "./Workspaces";
-import {ApiProperty}      from "@nestjs/swagger";
+import {ApiProperty} from "@nestjs/swagger";
+import {
+    IsEmail,
+    IsNotEmpty,
+    IsString,
+} from "class-validator";
 
 @Index("email", ["email"], {unique: true})
 @Entity({
@@ -35,6 +40,7 @@ export class Users {
     })
     id: number;
 
+    @IsEmail()
     @ApiProperty({
         example: "water_876@naver.com",
         description: "사용자 이메일",
@@ -47,8 +53,10 @@ export class Users {
     email: string;
 
 
+    @IsString()
+    @IsNotEmpty()
     @ApiProperty({
-        example: '김천',
+        example: "김천",
         description: "사용자 닉네임",
     })
     @Column("varchar", {
@@ -57,6 +65,8 @@ export class Users {
     })
     nickname: string;
 
+    @IsString()
+    @IsNotEmpty()
     @Column("varchar", {
         name: "password",
         length: 100,
