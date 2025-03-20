@@ -27,6 +27,7 @@ import {Workspaces}       from "@/entities/Workspaces";
 
 @Module({
     imports: [
+        TypeOrmModule.forFeature([Users]),
         ConfigModule.forRoot({
             isGlobal: true,
         }),
