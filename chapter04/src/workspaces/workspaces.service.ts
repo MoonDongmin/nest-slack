@@ -75,7 +75,7 @@ export class WorkspacesService {
             .getMany();
     }
 
-    async createWorkspaceMember(url, email) {
+    async createWorkspaceMembers(url, email) {
         const workspace = await this.workspacesRepository.findOne({
             where: {url},
             relations: ["Channels"],

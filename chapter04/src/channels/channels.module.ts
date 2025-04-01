@@ -3,18 +3,18 @@ import {ChannelsService}    from "./channels.service";
 import {ChannelsController} from "./channels.controller";
 import {TypeOrmModule}      from "@nestjs/typeorm";
 import {Workspaces}         from "@/entities/Workspaces";
-import {WorkspaceMembers}   from "@/entities/WorkspaceMembers";
 import {Channels}           from "@/entities/Channels";
 import {ChannelMembers}     from "@/entities/ChannelMembers";
 import {Users}              from "@/entities/Users";
+import {ChannelChats}       from "@/entities/ChannelChats";
 
 @Module({
     imports: [TypeOrmModule.forFeature([
-        Workspaces,
-        WorkspaceMembers,
         Channels,
-        ChannelMembers,
+        ChannelChats,
         Users,
+        Workspaces,
+        ChannelMembers,
     ])],
     providers: [ChannelsService],
     controllers: [ChannelsController],
