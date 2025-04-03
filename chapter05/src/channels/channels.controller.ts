@@ -6,6 +6,7 @@ import {
     ParseIntPipe,
     Post,
     Query,
+    UploadedFiles,
     UseGuards,
     UseInterceptors,
 }                         from "@nestjs/common";
@@ -19,6 +20,17 @@ import {ChannelsService}  from "@/channels/channels.service";
 import {User}             from "@/common/decorators/user.decorator";
 import {Users}            from "@/entities/Users";
 import {CreateChannelDto} from "@/channels/dto/post-chat.dto";
+import {FilesInterceptor} from "@nestjs/platform-express";
+import path          from "path";
+import fs            from "fs";
+import multer             from "multer";
+
+try {
+    fs.readdirSync("uploads");
+} catch (error) {
+    console.error("uploads 폴더가 없어 uploads 폴더를 생성합니다.");
+    fs.mkdirSync("uploads");
+}
 
 @ApiTags("CHANNELS")
 @ApiCookieAuth("connect.sid")
@@ -100,6 +112,42 @@ export class ChannelsController {
         @Body("content") content,
         @User() user: Users,
     ) {
+        return this.channelsService.createWorkspaceChannelChats(
+            url,
+            name,
+            content,
+            user.id,
+        );
+    }
+
+    @ApiOperation({summary: "워크스페이스 특정 채널 이미지 업로드하기"})
+    @UseInterceptors(
+        FilesInterceptor("image", 10, {
+            storage: multer.diskStorage({
+                destination(req, file, cb) {
+                    cb(null, "uploads/");
+                },
+                filename(req, file, cb) {
+                    const ext = path.extname(file.originalname);
+                    cb(null, path.basename(file.originalname, ext) + Date.now() + ext);
+                },
+            }),
+            limits: {fileSize: 5 * 1024 * 1024}, // 5MB
+        }),
+    )
+    @Post(":url/channels/:name/images")
+    async createWorkspaceChannelImages(
+        @Param("url") url,
+        @Param("name") name,
+        @UploadedFiles() files: Express.Multer.File[],
+        @User() user: Users,
+    ) {
+        return this.channelsService.createWorkspaceChannelImages(
+            url,
+            name,
+            files,
+            user.id,
+        );
     }
 
 

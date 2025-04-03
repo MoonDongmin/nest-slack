@@ -1,21 +1,23 @@
-import {NestFactory}         from "@nestjs/core";
-import {AppModule}           from "@/app.module";
-import * as process          from "node:process";
+import {NestFactory}            from "@nestjs/core";
+import {AppModule}              from "@/app.module";
+import * as process             from "node:process";
 import {
     DocumentBuilder,
     SwaggerModule,
-}                            from "@nestjs/swagger";
-import cookieParser          from "cookie-parser";
-import session               from "express-session";
-import {HttpExceptionFilter} from "@/httpException.filter";
-import {ValidationPipe}      from "@nestjs/common";
-import passport              from "passport";
+}                               from "@nestjs/swagger";
+import cookieParser             from "cookie-parser";
+import session                  from "express-session";
+import {HttpExceptionFilter}    from "@/httpException.filter";
+import {ValidationPipe}         from "@nestjs/common";
+import passport                 from "passport";
+import path                     from "path";
+import {NestExpressApplication} from "@nestjs/platform-express";
 
 
 declare const module: any;
 
 async function bootstrap() {
-    const app = await NestFactory.create(AppModule);
+    const app = await NestFactory.create<NestExpressApplication>(AppModule);
     const port = process.env.PORT || 3000;
     app.useGlobalPipes(new ValidationPipe());
     app.useGlobalFilters(new HttpExceptionFilter());
@@ -25,6 +27,15 @@ async function bootstrap() {
         .setVersion("1.0")
         .addCookieAuth("connect.sid")
         .build();
+
+    app.enableCors({
+        origin: true,
+        credentials: true,
+    });
+
+    app.useStaticAssets(path.join(__dirname, "..", "uploads"), {
+        prefix: "/uploads",
+    });
 
     const document = SwaggerModule.createDocument(app, config);
     SwaggerModule.setup("api", app, document);
